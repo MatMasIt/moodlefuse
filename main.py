@@ -24,8 +24,6 @@ MOUNT = os.getenv('MOUNT')
 
 m = Moodle(SITE, MOODLE_USERNAME, PASSWORD)
 m.login()
-print(m.get_user().__dict__)
-
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 if __name__ == '__main__':
     FUSE(MoodleFS(m), MOUNT, foreground=True, allow_other=True)

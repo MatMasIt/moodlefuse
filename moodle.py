@@ -1,3 +1,5 @@
+import re
+
 import requests
 
 # a minimalistic moodle api wrapper, just for the purpose of this project
@@ -25,8 +27,10 @@ class Course:
 class Section:
     def __init__(self, id_i: int, name: str, htmlcontent: str, modules: list):
         self.id = id_i
-        if len(name.strip()) == 0:
+        self.autoName = False
+        if len(re.sub(r'\W+', '', name)) == 0:
             name = "Section " + str(id_i)
+            self.autoName = True
         self.name = name
         self.htmlcontent = htmlcontent
         self.modules = modules
@@ -86,6 +90,7 @@ class Moodle:
             raise Exception(r["error"])
         self.token = r["token"]
         self.private_token = r["privatetoken"]
+        self.get_user()
 
     def get_user(self) -> MoodleUser:
         url = self.site_url + "/webservice/rest/server.php?moodlewsrestformat=json"
