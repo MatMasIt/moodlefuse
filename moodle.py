@@ -1,6 +1,5 @@
 import requests
 
-
 # a minimalistic moodle api wrapper, just for the purpose of this project
 # it's not meant to be complete
 # it's not meant to be efficient
@@ -155,7 +154,6 @@ class Moodle:
         f = Folder(folder_module["id"], folder_module["name"], [])
         for file in folder_module["contents"]:
             if file["type"] == "file":
-                print(file)
                 f.files.append(File(file["filename"], file["filesize"], file["fileurl"]))
             else:
                 f.files.append(self.__folder_rec_exploder(file))
