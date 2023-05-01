@@ -1,4 +1,5 @@
 # moodlefuse - FUSE filesystem for Moodle
+[![CodeFactor](https://www.codefactor.io/repository/github/matmasit/moodlefuse/badge/main)](https://www.codefactor.io/repository/github/matmasit/moodlefuse/overview/main)
 
 This is a FUSE filesystem for Moodle. It allows you to mount your Moodle site as a filesystem and access your Moodle files as if they were local files.
 
