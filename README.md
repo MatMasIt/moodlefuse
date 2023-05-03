@@ -42,6 +42,7 @@ This only works on Linux, as it uses FUSE. I have not tested it on Mac, but it c
 
 ### Future enhancements
 
+* Better memory handling (customizable), expecially for large files (chunking)
 * Forum viewing support
 * Persistent tree cache (currently it is built at every mount)
 * Better error handling
