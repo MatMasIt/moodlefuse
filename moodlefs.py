@@ -1,5 +1,6 @@
 from errno import ENOENT, EACCES
 
+import fuse
 from fuse import LoggingMixIn, Operations, FuseOSError
 
 from FSNode import FSNode
@@ -14,13 +15,13 @@ class MoodleFS(LoggingMixIn, Operations):
         self.tree = FSNode.from_moodle(self.moodle)
 
     def chmod(self, path, mode):
-        return 0  # makes no sense
+        raise fuse.FuseOSError(EACCES)
 
     def chown(self, path, uid, gid):
-        return 0  # makes no sense
+        raise fuse.FuseOSError(EACCES)
 
     def create(self, path, mode):
-        return 0  # makes no sense
+        raise fuse.FuseOSError(EACCES)
 
     def getattr(self, path, fh=None):
         s = self.tree.resolve_path(path)
@@ -32,11 +33,10 @@ class MoodleFS(LoggingMixIn, Operations):
         pass
 
     def listxattr(self, path):
-        attrs = self.files[path].get('attrs', {})
         return []
 
     def mkdir(self, path, mode):
-        return EACCES
+        raise fuse.FuseOSError(EACCES)
 
     def open(self, path, flags):
         return 120
@@ -55,10 +55,10 @@ class MoodleFS(LoggingMixIn, Operations):
         pass
 
     def rename(self, old, new):
-        return EACCES
+        raise fuse.FuseOSError(EACCES)
 
     def rmdir(self, path):
-        return EACCES
+        raise fuse.FuseOSError(EACCES)
 
     def setxattr(self, path, name, value, options, position=0):
         pass
@@ -67,16 +67,16 @@ class MoodleFS(LoggingMixIn, Operations):
         return dict(f_bsize=512, f_blocks=4096, f_bavail=2048)
 
     def symlink(self, target, source):
-        return EACCES
+        raise fuse.FuseOSError(EACCES)
 
     def truncate(self, path, length, fh=None):
-        return EACCES
+        raise fuse.FuseOSError(EACCES)
 
     def unlink(self, path):
-        return EACCES
+        raise fuse.FuseOSError(EACCES)
 
     def utimens(self, path, times=None):
         pass
 
     def write(self, path, data, offset, fh):
-        return EACCES
+        raise fuse.FuseOSError(EACCES)

@@ -1,3 +1,4 @@
+import os
 import stat
 import sys
 import time
@@ -79,21 +80,24 @@ class FSNode:
     def to_stat_struct(self):
         if self.is_dir:
             return dict(
-                st_mode=(stat.S_IFDIR | 0o755),
+                st_mode=(stat.S_IFDIR | 0o555),
                 st_ctime=time.time(),
                 st_mtime=time.time(),
                 st_atime=time.time(),
-                st_nlink=2,
-
+                st_nlink=len(self.children),
+                st_uid=os.getuid(),
+                st_gid=os.getgid()
             )
         else:
             return dict(
-                st_mode=(stat.S_IFREG | 0o755),
+                st_mode=(stat.S_IFREG | 0o555),
                 st_ctime=time.time(),
                 st_mtime=time.time(),
                 st_atime=time.time(),
                 st_nlink=2,
-                st_size=self.size
+                st_size=self.size,
+                st_uid=os.getuid(),
+                st_gid=os.getgid()
             )
 
     def find_child_by_name(self, name: str):
@@ -216,13 +220,13 @@ class FSNode:
         link_hash = FSNode.hash_link_to(self.linkTo)
         if link_hash not in fileCache.keys():
             if isinstance(self.linkTo, HTMLContentMap):
-                fileCache[self.linkTo] = {"datetime": time.time(), "content": self.linkTo.markdown_make().encode()}
+                fileCache[link_hash] = {"datetime": time.time(), "content": self.linkTo.markdown_make().encode()}
             elif isinstance(self.linkTo, UrlLink):
-                fileCache[self.linkTo] = {"datetime": time.time(), "content": self.linkTo.url.encode()}
+                fileCache[link_hash] = {"datetime": time.time(), "content": self.linkTo.url.encode()}
             elif isinstance(self.linkTo, FileLink):
                 r = requests.get(self.linkTo.url + "&token=" + mo.token)
-                fileCache[self.linkTo] = {"datetime": time.time(), "content": r.content}
-        return fileCache[self.linkTo]["content"][offset:offset + size]
+                fileCache[link_hash] = {"datetime": time.time(), "content": r.content}
+        return fileCache[link_hash]["content"][offset:offset + size]
 
     @staticmethod
     def from_moodle(moodle: Moodle):
