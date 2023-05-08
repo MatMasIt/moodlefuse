@@ -41,7 +41,6 @@ This only works on Linux, as it uses FUSE. I have not tested it on Mac, but it c
 * Automatic html-to-markdown conversion for announcements
 
 ### Future enhancements
-* Fix known file displaying errors, expecially in subfolders
 * Better memory handling (customizable), expecially for large files (chunking)
 * Forum viewing support
 * Persistent tree cache (currently it is built at every mount)

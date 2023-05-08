@@ -2,6 +2,7 @@ import re
 
 import requests
 
+
 # a minimalistic moodle api wrapper, just for the purpose of this project
 # it's not meant to be complete
 # it's not meant to be efficient
@@ -66,11 +67,15 @@ class Folder:
 
 
 class File:
-    def __init__(self, filename: str, filesize: int, fileurl: str):
+    def __init__(self, filename: str, filesize: int, fileurl: str, file_relative_path: str | None, created: int | None,
+                 modified: int | None):
         self.filename = filename
         self.name = filename
         self.filesize = filesize
         self.fileurl = fileurl
+        self.file_relative_path = file_relative_path
+        self.created = created
+        self.modified = modified
 
 
 class Moodle:
@@ -147,10 +152,10 @@ class Moodle:
                     modules.append(Url(module["id"], module["name"],
                                        (module["description"] if "description" in module.keys() else ""),
                                        module["url"]))
-                elif module["modname"] == "folder":
+                elif module["modname"] == "folder" or module["modname"] == "resource":
                     modules.append(self.__folder_rec_exploder(module))
                 elif module["modname"] == "file":
-                    modules.append(File(module["fileurl"], module["filename"], module["filesize"], module["fileurl"]))
+                    modules.append(File(module["filename"], module["filesize"], module["fileurl"], module["filepath"], module["timecreated"], module["timemodified"]))
 
             sections.append(Section(section["id"], section["name"], section["summary"], modules))
         return sections
@@ -159,7 +164,7 @@ class Moodle:
         f = Folder(folder_module["id"], folder_module["name"], [])
         for file in folder_module["contents"]:
             if file["type"] == "file":
-                f.files.append(File(file["filename"], file["filesize"], file["fileurl"]))
+                f.files.append(File(file["filename"], file["filesize"], file["fileurl"], file["filepath"], file["timecreated"], file["timemodified"]))
             else:
                 f.files.append(self.__folder_rec_exploder(file))
         return f

@@ -49,7 +49,7 @@ class MoodleFS(LoggingMixIn, Operations):
         return ['.', '..'] + [child.name for child in dir_e.children]
 
     def readlink(self, path):
-        return self.data[path]
+        pass
 
     def removexattr(self, path, name):
         pass

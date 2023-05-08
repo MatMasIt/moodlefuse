@@ -170,7 +170,7 @@ class FSNode:
                     f.children.append(r)
             return f
         elif isinstance(mo, File):
-            return FSNode.from_file(mo, parent, m)
+            FSNode.from_file(mo, parent, m)
         elif isinstance(mo, Label):
             FSNode.from_label(mo, parent, m)
         elif isinstance(mo, Url):
@@ -179,10 +179,22 @@ class FSNode:
 
     @staticmethod
     def from_file(el: File, parent, m: Moodle):
+        subpaths = el.file_relative_path.split("/")
+        if subpaths[-1] == "":
+            subpaths = subpaths[:-1]
+        if subpaths[0] == "":
+            subpaths = subpaths[1:]
+        for path_component in subpaths:
+            path_component = slugify(path_component)
+            element = parent.find_child_by_name(path_component)
+            if element is None:
+                element = FSNode(path_component, parent, True)
+                parent.children.append(element)
+            parent = element
         f = FSNode(el.name, parent, False)
         f.size = el.filesize
         f.linkTo = FileLink(el.fileurl)
-        return f
+        parent.children.append(f)
 
     @staticmethod
     def hash_link_to(a: LinkTo):
@@ -238,3 +250,8 @@ class FSNode:
         f.size = len(mo.url)
         f.linkTo = UrlLink(mo.url)
         return f
+
+    def get_full_path(self) -> str:
+        if self.parent is None:
+            return "/"
+        return self.parent.get_full_path() + self.name + "/"
