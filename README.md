@@ -6,6 +6,10 @@ This is a FUSE filesystem for Moodle. It allows you to mount your Moodle site as
 It is a concept that has been around for a while, but I have not found any implementations that I could get to work, or that were not abandoned.
 This is my attempt at creating one.
 
+## Windows binary
+
+You can easily grab a windows binary in the _realeases_ section, it behaves as the program, make sure to place the env file alongside it
+
 ## Installation
 
 First, you need to create a `.env` file with the following variables:
@@ -25,6 +29,9 @@ python moodlefuse.py
 ```
 
 This only works on Linux, as it uses FUSE. I have not tested it on Mac, but it could work there too.
+
+> Q: Why is _refuse_ in the project root?
+> It's alpha software with some errors, I managed to make it fit for this project for now
 
 
 ### Requirements

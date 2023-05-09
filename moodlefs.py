@@ -1,7 +1,7 @@
 from errno import ENOENT, EACCES
 
-import fuse
-from fuse import LoggingMixIn, Operations, FuseOSError
+from refuse import high as fuse
+from refuse.high import LoggingMixIn, Operations, FuseOSError
 
 from FSNode import FSNode
 
@@ -30,10 +30,10 @@ class MoodleFS(LoggingMixIn, Operations):
         return s.to_stat_struct()
 
     def getxattr(self, path, name, position=0):
-        pass
+        raise fuse.FuseOSError(EACCES)
 
     def listxattr(self, path):
-        return []
+        raise fuse.FuseOSError(EACCES)
 
     def mkdir(self, path, mode):
         raise fuse.FuseOSError(EACCES)

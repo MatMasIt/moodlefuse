@@ -84,9 +84,7 @@ class FSNode:
                 st_ctime=time.time(),
                 st_mtime=time.time(),
                 st_atime=time.time(),
-                st_nlink=len(self.children),
-                st_uid=os.getuid(),
-                st_gid=os.getgid()
+                st_nlink=len(self.children)
             )
         else:
             return dict(
@@ -95,9 +93,7 @@ class FSNode:
                 st_mtime=time.time(),
                 st_atime=time.time(),
                 st_nlink=2,
-                st_size=self.size,
-                st_uid=os.getuid(),
-                st_gid=os.getgid()
+                st_size=self.size
             )
 
     def find_child_by_name(self, name: str):
@@ -267,7 +263,6 @@ class FSNode:
         f.children.append(readme)
 
         return f
-
     @staticmethod
     def from_label(mo: Label, parent, m) -> None:
         f = parent.find_child_by_name(slugify("README.md"))
@@ -283,9 +278,15 @@ class FSNode:
 
     @staticmethod
     def from_url(mo: Url, parent, m):
-        f = FSNode(mo.name, parent, False)
-        f.size = len(mo.url)
-        f.linkTo = UrlLink(mo.url)
+        if os.name == 'nt':
+            f = FSNode(mo.name+".url", parent, False)
+            file_content = "[InternetShortcut]\nURL="+mo.url
+            f.size = len(file_content)
+            f.linkTo = UrlLink(file_content)
+        else:
+            f = FSNode(mo.name+".txt", parent, False)
+            f.size = len(mo.url)
+            f.linkTo = UrlLink(mo.url)
         return f
 
     def get_full_path(self) -> str:

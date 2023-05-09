@@ -1,6 +1,6 @@
 import logging
-
-from fuse import FUSE
+import sys
+from refuse.high import FUSE
 
 from moodle import Moodle
 from moodlefs import MoodleFS
