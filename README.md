@@ -57,7 +57,7 @@ This works on Linux and Windows. I have not tested it on Mac OS, but it could wo
 * Better error handling
 * Better logging
 * Better documentation
-
+* GUI
 
 ### Demo
 
