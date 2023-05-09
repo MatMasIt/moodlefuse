@@ -8,7 +8,9 @@ This is my attempt at creating one.
 
 ## Windows binary
 
-You can easily grab a windows binary in the _realeases_ section, it behaves as the program, make sure to place the env file alongside it
+You can easily grab a Windows binary in the _realeases_ section, it behaves as the program with all dependencies already resolved in a single file (thanks, pyinstaller), make sure to place the env file alongside it with the correct credentials.
+
+</u>**You need to install [Winsfp](https://winfsp.dev/) to run the program on Windows.**</u>
 
 ## Installation
 
@@ -28,7 +30,7 @@ pip install -r requirements.txt
 python moodlefuse.py
 ```
 
-This only works on Linux, as it uses FUSE. I have not tested it on Mac, but it could work there too.
+This works on Linux and Windows. I have not tested it on Mac OS, but it could work there too.
 
 > Q: Why is _refuse_ in the project root?
 > It's alpha software with some errors, I managed to make it fit for this project for now
@@ -37,7 +39,7 @@ This only works on Linux, as it uses FUSE. I have not tested it on Mac, but it c
 ### Requirements
 
 * Python 3.6 or newer
-* [fusepy](https://github.com/fusepy/fusepy) - FUSE bindings for Python
+* refuse - cross platform FUSE bindings
 * requests - HTTP library for Python
 * python-dotenv - Python library for reading .env files
 
@@ -48,6 +50,7 @@ This only works on Linux, as it uses FUSE. I have not tested it on Mac, but it c
 * Automatic html-to-markdown conversion for announcements
 
 ### Future enhancements
+* Fix invisible top-level files
 * Better memory handling (customizable), expecially for large files (chunking)
 * Forum viewing support
 * Persistent tree cache (currently it is built at every mount)
