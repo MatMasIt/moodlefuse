@@ -86,6 +86,9 @@ class Moodle:
         self.site_url = site_url
         self.username = username
         self.password = password
+        self.site_name = None
+        self.release = None
+        self.lang = None
 
     def login(self) -> None:
         url = self.site_url + "/login/token.php?username=" + self.username + "&password=" + self.password + "&service=moodle_mobile_app"
@@ -104,6 +107,9 @@ class Moodle:
         self.user_id = r["userid"]
         self.userpictureurl = r["userpictureurl"]
         self.fullname = r["fullname"]
+        self.site_name = r["sitename"]
+        self.release = r["release"]
+        self.lang = r["lang"]
         return MoodleUser(self.username, self.fullname, self.userpictureurl)
 
     def get_enrolled_categories(self) -> list[Category]:

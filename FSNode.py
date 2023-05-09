@@ -233,6 +233,39 @@ class FSNode:
         f = FSNode("/", None, True)
         for cat in moodle.get_enrolled_categories():
             f.children.append(FSNode.from_category(cat, f, moodle))
+        # request picture url and get filetype of image
+        response = requests.head(moodle.userpictureurl)
+        if response.headers["content-type"] == "image/jpeg":
+            filetype = ".jpg"
+        elif response.headers["content-type"] == "image/png":
+            filetype = ".png"
+        elif response.headers["content-type"] == "image/gif":
+            filetype = ".gif"
+        elif response.headers["content-type"] == "image/bmp":
+            filetype = ".bmp"
+        elif response.headers["content-type"] == "image/webp":
+            filetype = ".webp"
+        elif response.headers["content-type"] == "image/tiff":
+            filetype = ".tiff"
+        else:
+            filetype = ""
+        if len(filetype):
+            user_picture = FSNode("user_picture"+filetype, f, False)
+            user_picture.linkTo = FileLink(moodle.userpictureurl)
+            user_picture.size = int(response.headers["content-length"])
+            f.children.append(user_picture)
+        readme = FSNode("README.md", f, False)
+        readme.linkTo = HTMLContentMap()
+        if moodle.site_name is not None:
+            readme.linkTo.add("<h1>" + moodle.site_name + "</h1><br />", 0)
+        if moodle.release is not None:
+            readme.linkTo.add("Moodle v. " + moodle.release + "<br />", 1)
+        if moodle.lang is not None:
+            readme.linkTo.add("Language: " + moodle.lang + "<br />", 2)
+        readme.linkTo.add("Logged in as  "+moodle.fullname+ "\n", 3)
+        readme.size = len(readme.linkTo.markdown_make())
+        f.children.append(readme)
+
         return f
 
     @staticmethod
