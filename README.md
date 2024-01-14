@@ -27,7 +27,7 @@ Then, just run the python script with the requirements installed. You can use a 
 
 ```bash
 pip install -r requirements.txt
-python moodlefuse.py
+python main.py
 ```
 
 This works on Linux and Windows. I have not tested it on Mac OS, but it could work there too.
